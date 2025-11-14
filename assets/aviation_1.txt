@@ -1,0 +1,195 @@
+
+A380
+Aileron
+Airbridge
+Airbus
+Airfield
+Airframe
+Airline
+Airliner
+Airspace
+Airspeed
+Altitude
+Approach
+Apron
+Aviation
+Avionics
+Baggage
+Beacon
+Biplane
+Boeing
+Bulkhead
+Cabin
+Cargo
+Carrier
+Catering
+Check-in
+Clearance
+Cockpit
+Comfort
+Commuter
+Concourse
+Configuration
+Constellation
+Controller
+Cruise
+Cuspidor
+Dashboard
+De-icing
+Departure
+Descent
+Dispatch
+Ditching
+Dome light
+Dorsal fin
+Drag
+Elevator
+Embraer
+Engine
+Enroute
+Entry door
+Escape slide
+Executive
+Exhaust
+Fairing
+Ferry flight
+Fighter
+Filing
+Flap track
+Flight deck
+Flightpath
+Flightplan
+Flighttime
+Fly-by-wire
+Fuselage
+Galley
+Gatehold
+Gearbox
+Glider
+GPS fix
+Ground stop
+Hangar
+Headwind
+Helipad
+Helicopter
+Holding
+Horizon
+Hub airport
+Hydraulics
+ILS approach
+Jet bridge
+Jet engine
+Jet fuel
+Jetliner
+Jetstream
+Jumpseat
+Ka-band
+Keel beam
+Kerosene
+Landing
+Landing gear
+Layover
+Light jet
+Line check
+Loadsheet
+Longhaul
+Mach number
+Main deck
+Maintenance
+Manifest
+Maneuver
+Manned
+Missile
+Meteor
+Meteoric
+Midfield
+Moonshot
+Nacelle
+Narrowbody
+Navigation
+Nighthawk
+Nosewheel
+Notam
+Offload
+Overrun
+Oxygen mask
+Pax count
+Payload
+Piloting
+Pitch trim
+Plug door
+Portal
+Preflight
+Pressurize
+Pushback
+Radar
+Ramp agent
+Range
+Rayleigh
+Recline
+Recovery
+Reheat
+Relay
+Rotorcraft
+Runway
+Safe altitude
+Seating
+Seaplane
+Service cart
+Service door
+Shorthaul
+Sideslip
+Simulator
+Skybridge
+Skylight
+Slipstream
+Soft landing
+Spacewalk
+Spoiler
+Stabilizer
+Standby
+Starboard
+Starliner
+Starlight
+Startup
+Static port
+Steward
+Superjet
+Supersonic
+Surge
+Tail cone
+Tailwind
+Taxiway
+Terminal
+Thales
+Thrust
+Touchdown
+Tower
+Traffic flow
+Transonic
+Trim wheel
+Turbofan
+Turbine
+Turboprop
+Turnaround
+Ultralight
+Undercarriage
+Unpressurized
+Uplink
+Vacuum pump
+Vectoring
+Vertical fin
+VFR flight
+Vibration
+VLA jet
+VNAV path
+Vortex
+Waypoint
+Weather radar
+Widebody
+Winglet
+Wingspan
+Workhorse
+Yaw damper
+Zero fuel
+Zonal drying

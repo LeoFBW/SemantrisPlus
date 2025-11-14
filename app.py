@@ -33,7 +33,7 @@ def calculate_board_size(score):
     size = max(5, score // 2)
     return min(size, 18)
 VOCABULARY = []
-VOCAB_FILE = os.path.join('assets', 'lite_500.txt')
+VOCAB_FILE = os.path.join('assets', 'aviation_1.txt')
 
 def load_vocabulary():
     """Loads the vocabulary from the assets file."""
