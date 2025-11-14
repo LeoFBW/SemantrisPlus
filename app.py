@@ -4,8 +4,6 @@ import random
 import google.generativeai as genai
 from flask import Flask, request, jsonify, render_template, session
 from dotenv import load_dotenv
-
-
 VOCABULARY = []
 VOCAB_FILE = os.path.join('assets', 'test_0.txt')
 
