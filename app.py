@@ -94,16 +94,30 @@ except Exception as e:
 
 # --- 4. Helper Functions ---
 
-def get_new_words(current_board, num_to_add):
-    """Gets new random words, ensuring no duplicates."""
-    available_vocab = [w for w in VOCABULARY if w not in current_board]
-    num_possible = len(available_vocab)
+# <<< CHANGED: get_new_words now uses 'seen_words' to prevent all duplicates
+def get_new_words(seen_words, num_to_add):
+    """
+    Gets new random words from VOCABULARY, ensuring they have not been 'seen'.
+    """
+    # Use sets for efficient filtering
+    seen_set = set(w.lower() for w in seen_words)
     
-    if num_possible < num_to_add:
-        new_words = random.choices(VOCABULARY, k=num_to_add)
-    else:
-        new_words = random.sample(available_vocab, num_to_add)
+    # Find all words in the main vocabulary that are not in the seen_set
+    available_vocab = [w for w in VOCABULARY if w.lower() not in seen_set]
+    
+    num_possible = len(available_vocab)
+
+    if num_possible == 0:
+        # No more words left in the entire vocabulary! This triggers the win condition.
+        return [] 
+
+    # We can only get as many words as are available
+    num_to_get = min(num_possible, num_to_add)
+    
+    if num_to_get == 0:
+        return []
         
+    new_words = random.sample(available_vocab, num_to_get)
     return new_words
 
 def parse_ranked_list(response_text, current_board):
@@ -124,23 +138,29 @@ def parse_ranked_list(response_text, current_board):
 
 # --- 5. Flask API Endpoints ---
 
+# <<< CHANGED: index now initializes 'seen_words' in the session
 @app.route('/')
 def index():
     """
     Serves the main game page.
-    Initializes the game state (score, board, target).
+    Initializes the game state (score, board, target, seen_words).
     """
     session.clear()  # Start a new game
     
-    # Initialize score
+    # Initialize score and seen_words list
     session['score'] = 0
+    session['seen_words'] = [] # Tracks all words used this game
 
     # Dynamic board size using the scoring function
     initial_size = calculate_board_size(0)     # score = 0 → minimum 5
-    initial_board = get_new_words([], initial_size)
+    
+    # Get initial words (passing an empty seen list)
+    initial_board = get_new_words(session['seen_words'], initial_size)
 
     session['board'] = initial_board
     session['target_word'] = random.choice(initial_board)
+    session['seen_words'] = list(initial_board) # Add the first board to seen_words
+    session['game_over'] = False # Initialize game over flag
 
     return render_template(
         'arcade.html',
@@ -149,17 +169,26 @@ def index():
         score=session['score']
     )
 
-# -----------------------------------------------------------------
-# NOTE: The duplicated index() route that was here has been removed.
-# -----------------------------------------------------------------
 
-
+# <<< CHANGED: /rank route extensively updated with new logic
 @app.route('/rank', methods=['POST'])
 def rank_words():
     """
     This is the core "LLM Ranking Engine" API for Arcade Mode.
     Takes a clue, gets a ranked list, checks for target, and updates score/board.
+    Implements persistent re-ranking and a win condition.
     """
+    # --- 1. Check for Win Condition (Game Over) ---
+    if session.get('game_over', False):
+        return jsonify({
+            'hit': False, 
+            'game_over': True, 
+            'new_target': "YOU WIN!", # Remind frontend
+            'new_board': session.get('board', []),
+            'new_score': session.get('score', 0),
+            'error': 'Game is over. Please refresh to start a new game.'
+        }), 400
+
     if not model:
         return jsonify({'error': 'Gemini model not initialized. Is API key set?'}), 500
 
@@ -168,14 +197,16 @@ def rank_words():
     if not clue:
         return jsonify({'error': 'No clue provided'}), 400
 
+    # --- 2. Load Session State ---
     current_board = session.get('board', [])
     target_word = session.get('target_word', '')
     score = session.get('score', 0)
+    seen_words = session.get('seen_words', []) # Load seen words
     
     if not current_board or not target_word:
         return jsonify({'error': 'Game session error. Please refresh.'}), 400
 
-    # --- Call Gemini API ---
+    # --- 3. Call Gemini API ---
     start_time = time.perf_counter()
     word_list_str = "\n".join(current_board)
     prompt = GEMINI_PROMPT_TEMPLATE.format(
@@ -197,44 +228,67 @@ def rank_words():
     end_time = time.perf_counter()
     latency_ms = round((end_time - start_time) * 1000)
 
-    # --- Arcade Game Logic ---
+    # --- 4. NEW MECHANIC: Persistent Re-ranking ---
+    # The session board *always* becomes the newly ranked list,
+    # even if it's a miss. This happens *before* HIT logic.
+    session['board'] = ranked_list
+
+    # --- 5. Find Target and Check for Hit ---
     try:
         target_index = next(i for i, w in enumerate(ranked_list) if w.lower() == target_word.lower())
     except StopIteration:
         return jsonify({'error': f'Target word "{target_word}" not found in AI response.'}), 500
 
     # Check if the target is in the bottom 4 (index 0, 1, 2, or 3)
-    # This logic matches your description:
-    # index 0 (most correlated) -> removes 4
-    # index 3 (4th correlated) -> removes 1
     if 0 <= target_index <= 3:
         # --- HIT! ---
-        # We want to remove the target *and* all words between it and the 4th-most related.
-        # ranked_list is sorted MOST related (index 0) -> LEAST related
-        # So we remove indices [target_index .. 3] inclusive.
-        num_to_remove = 4 - target_index          # 4, 3, 2, or 1
-        start = target_index                      # ensure target is always removed
-        end = start + num_to_remove               # slice end (exclusive) => up to index 3
-        words_removed = ranked_list[start:end]    # e.g. idx 2 -> remove [2,3]
-        #words
+        num_to_remove = 4 - target_index
+        start = target_index
+        end = start + num_to_remove
+        words_removed = ranked_list[start:end]
         
         score += len(words_removed)
         
-        words_to_keep = [w for w in current_board if w not in words_removed]
+        # We base 'words_to_keep' on the newly ranked_list
+        words_to_keep = [w for w in ranked_list if w not in words_removed]
+        
         desired_size = calculate_board_size(score)
         missing = max(0, desired_size - len(words_to_keep))
 
-        new_words = get_new_words(words_to_keep, missing)
+        # --- 6. NEW MECHANIC: Get New Words & Check Win Condition ---
+        new_words = get_new_words(seen_words, missing)
+
+        if not new_words and missing > 0:
+            # WIN CONDITION: We needed words, but the vocabulary is empty.
+            session['game_over'] = True
+            session['board'] = words_to_keep # Save final board
+            session['score'] = score # Save final score
+            
+            return jsonify({
+                'hit': True,
+                'game_over': True,
+                'words_removed': words_removed,
+                'new_board': words_to_keep, # Board freezes here
+                'new_target': "YOU WIN!", # Signal to frontend
+                'new_score': score,
+                'ranked_list': ranked_list,
+                'latency_ms': latency_ms
+            })
+        
+        # --- 7. (HIT) Update Board & Session ---
         new_board = words_to_keep + new_words
         
+        # Choose target (original logic handles empty new_words)
         new_target = random.choice(new_words) if new_words else random.choice(new_board)
 
         session['board'] = new_board
         session['score'] = score
         session['target_word'] = new_target
+        session['seen_words'] = seen_words + new_words # Add new words to seen list
 
         return jsonify({
             'hit': True,
+            'game_over': False,
             'words_removed': words_removed,
             'new_board': new_board,
             'new_target': new_target,
@@ -245,12 +299,13 @@ def rank_words():
 
     else:
         # --- MISS! ---
-        session['board'] = ranked_list
-
+        # No session updates needed for board, as it was already
+        # set to ranked_list before the if/else block.
         return jsonify({
             'hit': False,
+            'game_over': False,
             'words_removed': [],
-            'new_board': ranked_list, 
+            'new_board': ranked_list, # Send the re-ranked board
             'new_target': target_word, 
             'new_score': score, 
             'ranked_list': ranked_list,

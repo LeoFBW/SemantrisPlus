@@ -89,3 +89,53 @@ this is a small demo only, please help your self configuering the API key which 
 
 
 A plethora of AI LLM are used, hence i extend my huge commandation to them, they are changing many industries helping our lifestyles for the better, so bravo.
+
+
+
+---
+
+
+
+V0.04:
+
+can you add a new mecanics, that regardless of hit or not:
+
+
+
+The session['board'] is updated to be the ranked_list returned by the AI. This "shuffles" the board into the order the AI just created, serving as a minor board change, before the
+
+
+
+Update Score: score is increased by the number of words removed.
+
+Calculate New Board:
+
+The words_removed are taken out of the current_board.
+
+A new desired_size is calculated using calculate_board_size(new_score). The board grows as the score increases.
+
+get_new_words() is called to add enough new words to meet this desired_size.
+
+Set New Target: A new target_word is chosen from the newly added words.
+
+Update Session: The board, score, and target_word in the session are all updated.
+
+Send Response: The server sends a JSON response with hit: True, the new_board, new_target, and new_score.
+
+
+
+logic commence as usual,
+
+
+
+also
+
+
+
+get_new_words() is called to add enough new words to meet this desired_size.
+
+
+
+
+
+There is a system thoughg dict with key = word, preventing words added to the board b4 is been added again. hence there's another condition, if no target words is remaining, then the game freezes in time and point, as it;s an winning condition alr
