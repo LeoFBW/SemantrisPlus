@@ -46,11 +46,12 @@
       overflow: hidden;
     }
 
-    .word-item {
-      transition: color 0.3s ease;
-      text-align: center;
-      padding: 0.3rem 1rem;
-    }
+  #tower .word-item {
+    font-size: 1.2rem;
+    line-height: 1.1;
+    padding: 0.15rem 0.3rem;
+    margin-top: -2px;
+  }
     
     .removing {
       animation: popOut 0.5s ease-in forwards;
@@ -66,6 +67,7 @@
       );
       pointer-events: none;
       border-top: 2px dashed rgba(79, 209, 197, 0.4);
+      transform: translateY(45px);  /* move it DOWN by 58px, shifter */
     }
 
     #tower-wrapper::-webkit-scrollbar {
@@ -149,9 +151,10 @@
       </div>
 
       <div class="relative flex-grow overflow-hidden my-4">
-        <div
-          class="hit-zone-gradient absolute bottom-0 left-0 w-full h-48"
-        ></div>
+      <div class="absolute bottom-0 left-0 w-full h-40 hit-zone-gradient"></div>
+
+      <!-- NEW SEPARATE DASHED LINE (place anywhere you want!) -->
+      <div class="hit-line absolute left-0 w-full"></div>
 
         <div
           id="tower-wrapper"
@@ -159,7 +162,7 @@
         >
           <div
             id="tower"
-            class="flex flex-col-reverse h-full px-4 py-4 space-y-2 space-y-reverse"
+            class="flex flex-col-reverse h-full px-4 py-4 space-y-0 space-y-reverse"
           >
             {% for word in game_board %}
             <div

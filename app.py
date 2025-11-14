@@ -31,7 +31,7 @@ def calculate_board_size(score):
     Board size = min(20, max(5, score//2))
     """
     size = max(5, score // 2)
-    return min(size, 18)
+    return min(size, 22)
 VOCABULARY = []
 VOCAB_FILE = os.path.join('assets', 'aviation_1.txt')
 
@@ -209,8 +209,14 @@ def rank_words():
     # index 3 (4th correlated) -> removes 1
     if 0 <= target_index <= 3:
         # --- HIT! ---
-        num_to_remove = 4 - target_index  # 4, 3, 2, or 1 word
-        words_removed = ranked_list[:num_to_remove] # These are the bottom-most words
+        # We want to remove the target *and* all words between it and the 4th-most related.
+        # ranked_list is sorted MOST related (index 0) -> LEAST related
+        # So we remove indices [target_index .. 3] inclusive.
+        num_to_remove = 4 - target_index          # 4, 3, 2, or 1
+        start = target_index                      # ensure target is always removed
+        end = start + num_to_remove               # slice end (exclusive) => up to index 3
+        words_removed = ranked_list[start:end]    # e.g. idx 2 -> remove [2,3]
+        #words
         
         score += len(words_removed)
         
