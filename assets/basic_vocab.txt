@@ -1,0 +1,161 @@
+television
+suburbia
+rock-and-roll
+sputnik
+jukebox
+cold war
+drive-in
+polaroid
+diesel
+refrigerator
+moonshot
+counterculture
+hippie
+miniskirt
+psychedelic
+Vietnam
+cassette
+civil rights
+boombox
+spacewalk
+disco
+microprocessor
+arcade
+vinyl
+oil crisis
+mainframe
+barcode
+walkman
+laser
+synthesizer
+personal computer
+blockbuster
+arcade cabinet
+camcorder
+MTV
+cyberspace
+cellphone
+VHS
+compact disc
+modem
+internet
+dot-com
+email
+mp3
+laptop
+globalization
+search engine
+chatroom
+DVD
+backpack
+smartphone
+wifi
+streaming
+social media
+bluetooth
+podcast
+emoji
+touchscreen
+cloud
+GPS
+algorithm
+automation
+big data
+blockchain
+browser
+cloud
+connectivity
+crypto
+cybersecurity
+dashboard
+database
+deepfake
+digitalization
+download
+ecosystem
+emoji
+encryption
+fintech
+framework
+frontend
+gigabyte
+globalization
+GPU
+hashtag
+homepage
+hybrid
+innovation
+interface
+internet
+IoT
+latency
+machine learning
+malware
+metadata
+microchip
+nanotech
+network
+offline
+online
+optimization
+password
+platform
+podcast
+processor
+quantum
+renewable
+robotics
+satellite
+screenshot
+server
+smartphone
+software
+startup
+streaming
+subscription
+system
+token
+UI
+UX
+upload
+viral
+virtual
+Wi-Fi
+wireless
+workspace
+automation
+avatar
+biofuel
+biometric
+cloud-native
+electric vehicle
+e-commerce
+e-sports
+gig economy
+green energy
+hyperlink
+mobile app
+neural network
+open-source
+peer-to-peer
+remote work
+sustainability
+telemetry
+telemedicine
+touchscreen
+wearable
+webpage
+API
+containerization
+distributed
+edge computing
+hyperautomation
+LLM
+microservices
+multiverse
+SaaS
+self-driving
+smart home
+social media
+tokenization
+zero-trust
