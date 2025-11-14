@@ -5,7 +5,7 @@ import google.generativeai as genai
 from flask import Flask, request, jsonify, render_template, session
 from dotenv import load_dotenv
 VOCABULARY = []
-VOCAB_FILE = os.path.join('assets', 'test_0.txt')
+VOCAB_FILE = os.path.join('assets', 'The_digital_space_1.txt')
 
 # Load environment variables from .env file (for GEMINI_API_KEY, FLASK_SECRET_KEY)
 load_dotenv()
@@ -85,7 +85,7 @@ generation_config = {
 
 try:
     model = genai.GenerativeModel(
-        model_name="gemini-2.5-flash-lite-preview-09-2025", # Using latest flash model
+        model_name="gemini-2.0-flash-lite", # Using latest flash model
         generation_config=generation_config
     )
 except Exception as e:

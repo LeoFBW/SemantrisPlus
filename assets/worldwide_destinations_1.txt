@@ -1,0 +1,212 @@
+Aegean
+Alhambra
+Alps
+Amazon
+Andes
+Angkor
+Antelope Canyon
+Arashiyama
+Arctic
+Ardennes
+Atacama
+Athabasca
+Atlas Mountains
+Bali
+Banff
+Barcelona
+Barringer Crater
+Bavaria
+Beijing
+Big Sur
+Bled
+Blue Lagoon
+Blue Mountains
+Bora Bora
+Borneo
+Bruges
+Budapest
+Cairo
+Calanques
+Cambodia
+Canary Islands
+Cappadocia
+Carpathians
+Cartagena
+Cascades
+Caspian
+Chamonix
+Changi
+Channel Islands
+Chiang Mai
+Chichen Itza
+Cinque Terre
+Colosseum
+Colorado Plateau
+Corfu
+Corsica
+Costa Brava
+Crete
+Croatia
+Cusco
+Danube
+Dead Sea
+Delphi
+Denali
+Dolomites
+Dubai
+Dublin
+Easter Island
+Edinburgh
+Eiger
+El Nido
+Everest
+Faroe Islands
+Fiji
+Florence
+Galápagos
+Ganges
+Garden Route
+Geneva
+Georgia
+Glencoe
+Glencoe Valley
+Göreme
+Grand Canyon
+Great Barrier Reef
+Great Wall
+Grenada
+Grindelwald
+Guatemala
+Hallstatt
+Hanoi
+Harbin
+Hawaii
+Himalayas
+Hobbiton
+Hong Kong
+Hokkaido
+Hvar
+Ibiza
+Iceland
+Inca Trail
+Interlaken
+Istanbul
+Jeju
+Jerusalem
+Jiuzhaigou
+Jordan
+Joshua Tree
+Jotunheimen
+Kilimanjaro
+Kyoto
+Komodo
+Krabi
+Kruger
+Lapland
+Laos
+Lhasa
+Lisbon
+Loire Valley
+London
+Luxor
+Machu Picchu
+Madeira
+Madrid
+Maldives
+Mallorca
+Manila
+Marrakech
+Mauritius
+Melbourne
+Mexico City
+Meteora
+Milan
+Mont Blanc
+Montenegro
+Monteverde
+Monument Valley
+Moraine Lake
+Moscow
+Mykonos
+Nagano
+Nagoya
+Nairobi
+Namib
+Naples
+Napa Valley
+Nazca
+Neuschwanstein
+New Zealand
+Nice
+Nile
+Norway
+Oaxaca
+Osaka
+Oslo
+Palawan
+Pamukkale
+Paris
+Patagonia
+Petra
+Phuket
+Pisa
+Prague
+Provence
+Puglia
+Pyrenees
+Quebec
+Reykjavik
+Rio
+Rome
+Rotorua
+Sahara
+Sapporo
+Sardinia
+Saxony
+Santorini
+Sapporo
+Seoul
+Serengeti
+Shanghai
+Shirakawa-go
+Sicily
+Siem Reap
+Singapore
+Skye
+Slovenia
+Sognefjord
+Sonoran Desert
+Sorrento
+South Island
+Stockholm
+Swiss Alps
+Sydney
+Tahiti
+Taipei
+Takayama
+Tasmania
+Tbilisi
+Tenerife
+Teotihuacan
+Tokyo
+Tonga
+Toronto
+Tuscany
+Uluru
+Ushuaia
+Valencia
+Vancouver
+Varanasi
+Venice
+Vienna
+Vientiane
+Vietnam
+Wadi Rum
+Warsaw
+Wellington
+Whistler
+Yosemite
+Yucatán
+Zagreb
+Zakynthos
+Zanzibar

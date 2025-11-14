@@ -1,3 +1,5 @@
+A Doc to show key AI use in this project
+
 1. Separate HTML and Main file, let use arcade.html for the HTML, hence update the python codes accordingly
 2. We will have a list of words in general_vocab.txt under assets folder of the same directory which stores words seaparated by line. Words are randomly selected from this list with checks to ensure the same word is not was not in the game before(can use index/word based dict to ensure such?)
 3. Instead of eliiminating the most similar word, remember in the arcade mode. there will be a target word to be removed, and as long as it's within the first four similar word, it will get removed with a new target word been generated. Hence similarly, the order will be reordered based on last entered word similarity from most correlated in the bottom, to least on the top using AI LLM. The word between the top 4 and the target word will be removed shall the target word within top 4 (you remove 4 words if you land target on the most correleted, but only 1 if it's 4th correlated).

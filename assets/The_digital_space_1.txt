@@ -1,0 +1,391 @@
+8086
+Accumulator
+AC
+Ada Lovelace
+AI
+Algorithm
+ALU
+AMD
+Ampere
+Analog
+Android
+API
+Apple
+ARM
+Array
+Assembler
+Backpropagation
+Bandwidth
+Binary
+BIOS
+Bit
+Bitstream
+Blockchain
+Boolean Logic
+Bootloader
+Bootstrap
+BSD
+Buffer
+Bug
+Bus
+Byte
+Bytecode
+Cache
+Cacheline
+Capacitor
+CDN
+Central Processing Unit
+Chip
+Cipher
+Circuit
+CLI
+Cloud
+Cluster
+CMOS
+Codec
+Compiler
+Compute
+Controller
+Core
+CPU
+Cryptography
+CUDA
+Cybernetics
+DAC
+Data
+Database
+Dataflow
+Datapath
+DDR
+Debug
+Decimal
+Deep Learning
+Demultiplexer
+Denormalized
+Dennis Ritchie
+DevOps
+Die
+Digital
+Diode
+DirectX
+Discrete Logic
+Distributed
+DNS
+Docker
+DOS
+DRAM
+Driver
+DSL
+Ecosystem
+Edge Computing
+Electricity
+Electromagnet
+Embedded
+Encryption
+ENIAC
+Ethernet
+Exabyte
+Exception
+Fairchild
+Fang Binxing
+Fedora
+Fiber Optic
+Field
+File System
+Firewall
+Firmware
+Flash Memory
+Floating Point
+Flux
+FPGA
+FPU
+Frontend
+Full Adder
+Gateway
+Gaussian
+GCC
+GDDR
+Geometry
+GHz
+Gigaflop
+Git
+GNU
+Google
+GPU
+Grace Hopper
+Graphics
+Hadoop
+Half-Adder
+Hard Drive
+Hardware
+Hashing
+Hertz
+Heuristic
+Hexadecimal
+Holography
+HTML
+HTTP
+HTTPS
+Hub
+Huawei
+Hypertext
+Hypervisor
+I2C
+IC
+ICMP
+IEEE
+IMAP
+Inductor
+Inference
+Input
+Instruction
+Instruction Set
+Integrated Circuit
+Intel
+Interface
+Internet
+Interrupt
+Inverter
+IO
+IoT
+IP
+IP Address
+ISA
+Java
+JavaScript
+Joule
+JSON
+K8s
+Kernel
+Key
+Kubernetes
+LAN
+Laptop
+Lattice
+Latency
+LCD
+LED
+LiDAR
+Library
+Linker
+Linux
+LLM
+Load Balancer
+Logic Gate
+Loop
+Machine Code
+Magnetron
+Mainframe
+Manifest
+Mask
+Matrix Ops
+Megabyte
+Memory
+Mesh
+Metadata
+Microcode
+Microcontroller
+Micron
+Microprocessor
+Microsoft
+Middleware
+MIMD
+MIPS
+MIT
+MNIST
+Mobile
+Modem
+Module
+Monitor
+Moore’s Law
+MOSFET
+Motherboard
+Multicast
+Multicore
+Multiplexer
+Nanometer
+NAND
+NAS
+Netmask
+Network
+Neural Network
+NIC
+Node
+NoSQL
+Nvidia
+Object
+Ohm
+Opcode
+Operand
+OpenCL
+OpenGL
+Open Source
+Operating System
+Optical Fiber
+OS
+OSI
+Overclocking
+Overflow
+Package
+Packet
+Padding
+Page
+Parallelism
+Parameter
+Parity
+Partition
+Pascal
+Patch
+Path
+PCB
+PCI
+PCIe
+Peer
+Peripheral
+Photonics
+Pipeline
+Pixel
+PLL
+Pointer
+Polymorphism
+Port
+POST
+Power Supply
+Process
+Processor
+Program
+Protocol
+Proxy
+Python
+Qubit
+Quantum
+Queue
+QUIC
+Race Condition
+Radio
+RAID
+RAM
+Raster
+Real Time
+Recursion
+Red Hat
+Redundancy
+Refresh
+Register
+Regression
+Relay
+Resistor
+RISC
+ROM
+Root
+Router
+Ruby
+SAN
+Santa Clara
+SATA
+Scala
+Scalar
+Scheduler
+SCSI
+SDK
+SDRAM
+Sector
+Security
+Semaphore
+Semiconductor
+Sensor
+Server
+SHA256
+Shader
+Shell
+Signal
+Silicon
+SIMD
+SIM Card
+Socket
+Software
+Solid State
+Spark
+Spectrum
+SQL
+SRAM
+SSD
+SSH
+Stack
+Stanford
+State Machine
+Static
+Storage
+String
+Subnet
+Subroutine
+Supercomputer
+Switch
+Symbol
+Syntax
+System
+Table
+Task
+TCP
+Tensor
+Terminal
+Tesla
+Thread
+Throttling
+Throughput
+Timer
+Token
+Topology
+Torvalds
+Touchscreen
+Trace
+Transformer
+Transistor
+Trap
+Tree
+Trojan
+TSMC
+Turing Machine
+UART
+Ubuntu
+Ultrasound
+Underflow
+Unified Memory
+UNIVAC
+Unix
+USB
+UTF
+Vector
+Verilog
+VHDL
+Virtual
+Virtual Machine
+Virus
+VLAN
+VLSI
+Volatile Memory
+Voltage
+Von Neumann
+VPN
+VRAM
+Waveform
+Wavelength
+Web
+WiFi
+Windows
+Wireless
+Word
+Workstation
+Worm
+X86
+Xerox
+Xilinx
+XML
+XOR
+YAML
+Zener
+Zero-Day
+Zip
+Zombie
+Zone
+
