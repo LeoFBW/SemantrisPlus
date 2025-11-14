@@ -31,7 +31,7 @@ def calculate_board_size(score):
     Board size = min(20, max(5, score//2))
     """
     size = max(5, score // 2)
-    return min(size, 20)
+    return min(size, 18)
 VOCABULARY = []
 VOCAB_FILE = os.path.join('assets', 'lite_500.txt')
 
