@@ -49,3 +49,43 @@ Thank you, we fix all major issues, however still some more needed not realted t
 
 1. animation and transition, ours is like sudden reordering and dropping new ones, In the real sematnris arcade mode, there's smooth trasnitions for reordering , such that the worsd swap place have a synced movement of traveling to destination at pace, and simiarly with annihilating words breaking apart(destorying and exploding), then words above it fall down to cover the annihilated height.   Simiarly new words are dropped from above with speed, instead of teleport like we are having now, fix this.
 2.  in the real semantric arcade mode, there's an artifical line at the 4th height signaling line of annihilation. simiarly i want this.
+
+
+
+
+
+**Readme.md:**
+
+write a readme.md about this project saying feeling like the concept ofsemantris is amaizng, learn woridng, un, energyiv, however it's kinda depracted considering the whole AI LLM race we are currently in, with AI LLM booming since the introudciton of chatgpt 3.5 in late 2022, hence this is a version simiarly in nature, but use LLM's spirit(in fact Google's gemini) to acheive same purpose but more clever. stronger and more up to date, using the mountains knoweldge that modern LLM has bene entrusted with. We included quite a bit of text file to test out for you, which you can just search '.txt' in app.py and reaplce it with any other, or your own text file samples under the asset subfolder. 
+
+Use requirements.txt to isntall necessry lib, also setup .env:
+
+GEMINI_API_KEY = "ABCDEFG_API_KEY"
+
+FLASK_SECRET_KEY=" 'ABCDEFG_SECRET_KEY'"
+
+
+
+Enjoy the game!
+
+Weakenss and drawback of using LLM, of course it's not detemrinistic, it's quite problaistic even with a tep of 0, but for most short pharses this is a small issue.
+
+
+
+project issues: 
+
+Animation stll many developement,
+
+UI kinda suck, but core feature suffice
+
+Needs an ending condition, right now it's kinda ended, which left long term TBD, but short term wise it would be who take shortest time to finish the same word list sample(that's why we included both timer and score lol).
+
+
+
+Pull requirests welcome in every front!
+
+this is a small demo only, please help your self configuering the API key which free tier should sufficee using gogole's AI studio API key, it's nowhere near smantirs groundbreaking in transfromatic deisgn arch or UI as i only spent an afternoon working on this proejct. Even iwth today's ;latest AI LLM, of course it's nowehere comparable to google's amaizng team of engineers acorss every stack. 
+
+
+
+A plethora of AI LLM are used, hence i extend my huge commandation to them, they are changing many industries helping our lifestyles for the better, so bravo.
