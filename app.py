@@ -5,6 +5,10 @@ import google.generativeai as genai
 from flask import Flask, request, jsonify, render_template, session
 from dotenv import load_dotenv
 
+
+VOCABULARY = []
+VOCAB_FILE = os.path.join('assets', 'test_0.txt')
+
 # Load environment variables from .env file (for GEMINI_API_KEY, FLASK_SECRET_KEY)
 load_dotenv()
 
@@ -32,8 +36,6 @@ def calculate_board_size(score):
     """
     size = max(5, score // 2)
     return min(size, 22)
-VOCABULARY = []
-VOCAB_FILE = os.path.join('assets', 'aviation_1.txt')
 
 def load_vocabulary():
     """Loads the vocabulary from the assets file."""
@@ -94,24 +96,18 @@ except Exception as e:
 
 # --- 4. Helper Functions ---
 
-# <<< CHANGED: get_new_words now uses 'seen_words' to prevent all duplicates
 def get_new_words(seen_words, num_to_add):
     """
     Gets new random words from VOCABULARY, ensuring they have not been 'seen'.
     """
-    # Use sets for efficient filtering
     seen_set = set(w.lower() for w in seen_words)
-    
-    # Find all words in the main vocabulary that are not in the seen_set
     available_vocab = [w for w in VOCABULARY if w.lower() not in seen_set]
     
     num_possible = len(available_vocab)
 
     if num_possible == 0:
-        # No more words left in the entire vocabulary! This triggers the win condition.
         return [] 
 
-    # We can only get as many words as are available
     num_to_get = min(num_possible, num_to_add)
     
     if num_to_get == 0:
@@ -138,29 +134,24 @@ def parse_ranked_list(response_text, current_board):
 
 # --- 5. Flask API Endpoints ---
 
-# <<< CHANGED: index now initializes 'seen_words' in the session
 @app.route('/')
 def index():
     """
     Serves the main game page.
     Initializes the game state (score, board, target, seen_words).
     """
-    session.clear()  # Start a new game
+    session.clear()
     
-    # Initialize score and seen_words list
     session['score'] = 0
-    session['seen_words'] = [] # Tracks all words used this game
+    session['seen_words'] = [] 
 
-    # Dynamic board size using the scoring function
-    initial_size = calculate_board_size(0)     # score = 0 → minimum 5
-    
-    # Get initial words (passing an empty seen list)
+    initial_size = calculate_board_size(0)
     initial_board = get_new_words(session['seen_words'], initial_size)
 
     session['board'] = initial_board
     session['target_word'] = random.choice(initial_board)
-    session['seen_words'] = list(initial_board) # Add the first board to seen_words
-    session['game_over'] = False # Initialize game over flag
+    session['seen_words'] = list(initial_board)
+    session['game_over'] = False
 
     return render_template(
         'arcade.html',
@@ -170,7 +161,6 @@ def index():
     )
 
 
-# <<< CHANGED: /rank route extensively updated with new logic
 @app.route('/rank', methods=['POST'])
 def rank_words():
     """
@@ -183,7 +173,7 @@ def rank_words():
         return jsonify({
             'hit': False, 
             'game_over': True, 
-            'new_target': "YOU WIN!", # Remind frontend
+            'new_target': "YOU WIN!",
             'new_board': session.get('board', []),
             'new_score': session.get('score', 0),
             'error': 'Game is over. Please refresh to start a new game.'
@@ -201,7 +191,7 @@ def rank_words():
     current_board = session.get('board', [])
     target_word = session.get('target_word', '')
     score = session.get('score', 0)
-    seen_words = session.get('seen_words', []) # Load seen words
+    seen_words = session.get('seen_words', [])
     
     if not current_board or not target_word:
         return jsonify({'error': 'Game session error. Please refresh.'}), 400
@@ -220,23 +210,39 @@ def rank_words():
         
         if not ranked_list:
             raise Exception("AI response was invalid or didn't match the board.")
+        
+        end_time = time.perf_counter()
+        latency_ms = round((end_time - start_time) * 1000)
 
+    # <<< CHANGED: This 'except' block now handles errors gracefully >>>
     except Exception as e:
-        print(f"Gemini API error: {e}")
-        return jsonify({'error': f'Gemini API error: {str(e)}'}), 500
-
-    end_time = time.perf_counter()
-    latency_ms = round((end_time - start_time) * 1000)
+        # Flag the warning on the server
+        print(f"WARNING: Gemini API or parsing error: {e}")
+        
+        # "Continue as normal": Return the *current* state without
+        # changes, signaling a "miss" with a special error flag.
+        return jsonify({
+            'hit': False,
+            'game_over': False,
+            'words_removed': [],
+            'new_board': current_board,      # Send the board *as it was*
+            'new_target': target_word,       # Send the target *as it was*
+            'new_score': score,              # Send the score *as it was*
+            'ranked_list': current_board,    # For consistency, send the un-ranked board
+            'latency_ms': 0,
+            'api_error': True, # Flag for the frontend
+            'error_message': f'API error: {str(e)}'
+        })
 
     # --- 4. NEW MECHANIC: Persistent Re-ranking ---
-    # The session board *always* becomes the newly ranked list,
-    # even if it's a miss. This happens *before* HIT logic.
+    # This code only runs if the 'try' block succeeded
     session['board'] = ranked_list
 
     # --- 5. Find Target and Check for Hit ---
     try:
         target_index = next(i for i, w in enumerate(ranked_list) if w.lower() == target_word.lower())
     except StopIteration:
+        # This should be rare, but handle it as a graceful error
         return jsonify({'error': f'Target word "{target_word}" not found in AI response.'}), 500
 
     # Check if the target is in the bottom 4 (index 0, 1, 2, or 3)
@@ -249,7 +255,6 @@ def rank_words():
         
         score += len(words_removed)
         
-        # We base 'words_to_keep' on the newly ranked_list
         words_to_keep = [w for w in ranked_list if w not in words_removed]
         
         desired_size = calculate_board_size(score)
@@ -261,15 +266,15 @@ def rank_words():
         if not new_words and missing > 0:
             # WIN CONDITION: We needed words, but the vocabulary is empty.
             session['game_over'] = True
-            session['board'] = words_to_keep # Save final board
-            session['score'] = score # Save final score
+            session['board'] = words_to_keep
+            session['score'] = score
             
             return jsonify({
                 'hit': True,
                 'game_over': True,
                 'words_removed': words_removed,
-                'new_board': words_to_keep, # Board freezes here
-                'new_target': "YOU WIN!", # Signal to frontend
+                'new_board': words_to_keep,
+                'new_target': "YOU WIN!",
                 'new_score': score,
                 'ranked_list': ranked_list,
                 'latency_ms': latency_ms
@@ -278,13 +283,12 @@ def rank_words():
         # --- 7. (HIT) Update Board & Session ---
         new_board = words_to_keep + new_words
         
-        # Choose target (original logic handles empty new_words)
         new_target = random.choice(new_words) if new_words else random.choice(new_board)
 
         session['board'] = new_board
         session['score'] = score
         session['target_word'] = new_target
-        session['seen_words'] = seen_words + new_words # Add new words to seen list
+        session['seen_words'] = seen_words + new_words
 
         return jsonify({
             'hit': True,
@@ -299,17 +303,16 @@ def rank_words():
 
     else:
         # --- MISS! ---
-        # No session updates needed for board, as it was already
-        # set to ranked_list before the if/else block.
         return jsonify({
             'hit': False,
             'game_over': False,
             'words_removed': [],
-            'new_board': ranked_list, # Send the re-ranked board
+            'new_board': ranked_list,
             'new_target': target_word, 
             'new_score': score, 
             'ranked_list': ranked_list,
-            'latency_ms': latency_ms
+            'latency_ms': latency_ms,
+            'api_error': False # Explicitly show no error
         })
 
 # --- 6. Run the Application ---
