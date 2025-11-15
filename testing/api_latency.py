@@ -82,7 +82,7 @@ class GeminiClient(LLMClientBase):
 # -------------------- OPENAI (SILICONFLOW) PROVIDER ------------------------
 
 class OpenAIClient(LLMClientBase):
-    def __init__(self, model="Pro/deepseek-ai/DeepSeek-V3.2-Exp"):
+    def __init__(self, model="deepseek-ai/DeepSeek-V3.2-Exp"):
     # def __init__(self, model="Qwen/Qwen3-VL-32B-Instruct"):
 
         
