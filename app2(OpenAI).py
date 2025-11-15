@@ -5,45 +5,23 @@ import google.generativeai as genai
 import openai  # <<< NEW >>>
 import requests  # <<< NEW >>>
 from flask import Flask, request, jsonify, render_template, session
-from dotenv import load_dotenv
+from dotenv import load_dotenv  
+
 
 # --- 0. Environment & Vocabulary ---
 
 VOCABULARY = []
-VOCAB_FILE = os.path.join('assets', 'The_digital_space_1.txt')
+VOCAB_FILE = os.path.join('assets', 'general_1.txt')
 
 # Load environment variables from .env file
-load_dotenv()
+
+load_dotenv() 
 
 # --- 1. Configuration ---
-
+hallucinated = 0
 app = Flask(__name__)
 # SECRET_KEY is required for Flask sessions.
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', os.urandom(24))
-
-# <<< NEW: Multi-LLM Configuration >>>
-# This section loads all necessary keys and settings from your .env file
-# Your .env file should now look something like this:
-#
-# # --- General ---
-# FLASK_SECRET_KEY="your_flask_secret_key"
-#
-# # --- Provider Choice ---
-# # (gemini, openai, or custom)
-# LLM_PROVIDER="gemini"
-#
-# # --- Gemini ---
-# GEMINI_API_KEY="your_gemini_api_key"
-#
-# # --- OpenAI ---
-# OPENAI_API_KEY="your_openai_api_key"
-# OPENAI_MODEL_NAME="gpt-4o-mini"
-#
-# # --- Custom Endpoint ---
-# # (An example for a self-hosted model)
-# CUSTOM_ENDPOINT_URL="http://localhost:11434/api/generate"
-# CUSTOM_API_KEY="your_custom_api_key" # Optional, for "Authorization: Bearer"
-# CUSTOM_MODEL_NAME="llama3"
 
 # --- Load LLM Provider Settings ---
 LLM_PROVIDER = os.environ.get('LLM_PROVIDER', 'custom').lower()
@@ -104,11 +82,20 @@ def load_vocabulary():
 # --- Prompt Templates ---
 # We keep the LLM-specific instruction templates separate.
 GAME_INSTRUCTIONS = """
-You are the ranking AI for a word association game.
-The user will provide a "Clue" and a "List of Words".
-Your job is to rank all words in the list by their semantic association to the clue, from MOST related to LEAST related.
-Respond with ONLY the ranked list of words, separated by newlines.
-Do not add any explanation, headers, or other text.
+You are the ranking engine for a word-association game.
+
+Your task:
+Given a CLUE and a LIST OF WORDS, you must re-rank ALL words by semantic relevance to the clue, from MOST related to LEAST related.
+
+STRICT RULES YOU MUST FOLLOW:
+1. You MUST output EXACTLY the same words that appeared in the input list.
+2. You MUST output ALL words. DONT DROP ANY!
+3. Output MUST contain each word on its own line.
+4. Output MUST be ONLY the ranked list — no comments, no numbering, no punctuation, no explanations.
+5. Do NOT add words into responce.
+6. The first line is the most related word; the last line is the least related.
+
+If you are unsure, still output a full re-ordering of all given words.
 """
 
 GEMINI_PROMPT_TEMPLATE = """
@@ -127,6 +114,9 @@ List of Words:
 {word_list}
 
 Ranked List:
+
+
+Re-ranked output (each word on its own line, no extra text)
 """
 
 # --- Generation Configs ---
@@ -206,23 +196,56 @@ def get_new_words(seen_words, num_to_add):
     if num_to_get == 0:
         return []
         
-    new_words = random.sample(available_vocab, num_to_get)
-    return new_words
+    new_words = random.sample(available_vocab, num_to_get) 
+    return new_words  
 
-def parse_ranked_list(response_text, current_board):
+
+
+def parse_ranked_list(response_text, current_board, clue=None):
     """
-    Parses the LLM's newline-separated list and validates it.
-    Returns the ranked list or None if validation fails.
+    Parses the LLM's newline-separated ranking output.
+    Safety layers:
+    - Remove hallucinated clue if LLM echoed it.
+    - Remove any words not in the current board.
+    - Still enforce strict validation.
     """
+
     if not response_text:
         print("LLM Validation Error: Received empty response.")
         return None
 
-    ranked_words = [word.strip() for word in response_text.strip().split('\n')]
-    
-    # Simple filter to remove empty strings that might result from LLM
-    ranked_words = [w for w in ranked_words if w]
-    
+    # Split output
+    ranked_words = [w.strip() for w in response_text.strip().split('\n')]
+    ranked_words = [w for w in ranked_words if w]  # remove empty lines
+
+    hallucinated = []  # track removed words for logging
+
+    # --- SAFETY 1: Remove hallucinated clue ---
+    if clue:
+        clue_lower = clue.strip().lower()
+        after = [w for w in ranked_words if w.lower() != clue_lower]
+        if len(after) != len(ranked_words):
+            hallucinated.append(clue)
+        ranked_words = after
+
+    # Prepare board set for quick checking
+    board_set = {w.lower() for w in current_board}
+
+    # --- SAFETY 2: Remove ANY hallucinated words not in board ---
+    cleaned = []
+    for w in ranked_words:
+        if w.lower() in board_set:
+            cleaned.append(w)
+        else:
+            hallucinated.append(w)
+
+    ranked_words = cleaned
+
+    # --- LOG hallucinations if any ---
+    if hallucinated:
+        print(f"[Safety] Removed hallucinated words: {hallucinated}")
+
+    # --- FINAL VALIDATION: Must match board (case-insensitive) exactly ---
     if sorted(w.lower() for w in ranked_words) == sorted(w.lower() for w in current_board):
         return ranked_words
     else:
@@ -293,6 +316,7 @@ def get_llm_ranking(clue, word_list_str):
 
 
 # --- 5. Flask API Endpoints ---
+
 
 @app.route('/')
 def index():
@@ -369,7 +393,7 @@ def rank_words():
         # This one function call now handles Gemini, OpenAI, or Custom
         response_text = get_llm_ranking(clue, word_list_str)
         
-        ranked_list = parse_ranked_list(response_text, current_board)
+        ranked_list = parse_ranked_list(response_text, current_board,clue)
         
         if not ranked_list:
             # This handles both empty responses and validation failures

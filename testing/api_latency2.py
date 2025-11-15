@@ -1,11 +1,15 @@
 from openai import OpenAI  
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
 
 client = OpenAI(api_key="sk-jttbbxsdepfuvkuaezofijfjispbwcyvnfuereikqkssavpv", base_url="https://api.siliconflow.cn/v1")  
 response = client.chat.completions.create(  
-    model='deepseek-ai/DeepSeek-V3.2-Exp',  
+    model=os.environ.get('TEST_CUSTOM_MODEL_NAME', 'tencent/Hunyuan-MT-7B'),  
     messages=[  
         {'role': 'user',  
-        'content': "tell me a story"}  
+        'content': "Tell me about London"}  
     ],  
     stream=True  
 )  
