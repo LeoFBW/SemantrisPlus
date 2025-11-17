@@ -1,138 +1,69 @@
-# **LLM-Powered Semantris Tower — A Modern Reimagining**
+# LLM-Powered Semantris Tower
 
-This project is a small, experimental re-creation of the brilliant **Semantris** concept.  
-The original Semantris was—and still is—an amazing linguistic puzzle built around clever word association. It helped people *learn wording, unlock creativity, spark intuition,* and generate surprising semantic connections.
+Lightweight, Flask-based reimagining of Google’s Semantris. You type a clue, an LLM re-ranks the tower of words by semantic relevance, and the lowest-ranked “target” word causes a mini Tetris-like collapse. The front end is a single Tailwind-powered `arcade.html`; the back end offers two variants:
 
-But it was also a product of its time.
+- `app.py`: Gemini-only implementation.
+- `app2(OpenAI).py`: Pluggable LLM version with Gemini, OpenAI, or a custom OpenAI-compatible endpoint.
 
-Since the introduction of **ChatGPT-3.5 in late 2022**, the entire world has shifted.  
-AI LLMs have exploded in capability, scale, reasoning power, and sheer cultural impact.  
-With modern models carrying **mountains of knowledge across every domain**, it felt natural to revisit Semantris through the lens of 2025’s LLM era.
+## Project tour
+- `templates/arcade.html`: Game UI, FLIP-style animations, keyboard hook, and fetch calls to `/rank`.
+- `app.py`: Gemini-only gameplay loop and vocabulary loader (`assets/The_digital_space_1.txt` by default).
+- `app2(OpenAI).py`: Same gameplay, but lets you switch between Gemini, OpenAI, or a custom endpoint via env vars. Uses `assets/worldwide_destinations_1.txt` by default.
+- `assets/*.txt`: Word lists; swap or add your own to change themes.
+- `requirements.txt`: Flask, google-generativeai, openai, python-dotenv, etc.
 
-And so, this project was born — a **lightweight LLM-powered arcade variant** that uses the spirit of Semantris but updates it with modern AI.
+## Setup
+1) Install dependencies
+```
+pip install -r requirements.txt
+```
 
+2) Create a `.env` in the project root
+```
+FLASK_SECRET_KEY="set-a-random-secret"
 
+# Pick one LLM path:
+# Gemini (used by app.py, or app2 when LLM_PROVIDER=gemini)
+GEMINI_API_KEY="your-gemini-api-key"
 
----
+# OpenAI (used only by app2 when LLM_PROVIDER=openai)
+OPENAI_API_KEY="your-openai-api-key"
+OPENAI_MODEL_NAME="gpt-4o-mini"   # optional override
 
-## **🧠 What This Project Does**
-This game uses **Google’s Gemini** LLM to:
+# Custom OpenAI-compatible endpoint (used only by app2 when LLM_PROVIDER=custom)
+CUSTOM_ENDPOINT_URL="https://your-endpoint/v1"
+CUSTOM_API_KEY="your-custom-api-key"
+CUSTOM_MODEL_NAME="your-model"    # required for custom mode
 
-- Rank words by semantic association  
-- Determine hits vs misses  
-- Dynamically reshuffle a tower of words  
-- Reward clever or accurate clues  
-- Enable truly modern semantic reasoning that stays up-to-date with today’s world
+# app2 only: choose which provider to use
+LLM_PROVIDER="gemini|openai|custom"
+```
 
-It is *not* deterministic (even at temperature 0), because LLMs aren’t strict sorting machines.  
-However, for short phrases and word association, the result is **surprisingly consistent and fun**.
+## Run the game
+- Gemini-only version:
+```
+python app.py
+```
 
-The implementation includes a small sample vocabulary stored as `.txt` files.  
-Feel free to replace them with **any of your own word lists**:
+- Switchable provider version (defaults to `LLM_PROVIDER=custom` unless you override):
+```
+python "app2(OpenAI).py"
+```
 
-- Search for `.txt` in `app.py`
-- Replace with another file in the `assets/` folder
-- Enjoy instant new themes (aviation, cities, sci-fi, geography, etc.)
+The server runs on `http://127.0.0.1:5001/`. Open it in your browser.
 
+## How to play
+- A tower of words is shown; one is the current **target**.
+- Type a clue and press Enter. The LLM reorders the tower by relevance to your clue.
+- If the target lands in the bottom four positions, those words disappear; your score increases and new words drop in.
+- The board size grows with score; you win when the vocabulary runs out and no new words can be added.
 
+## Customizing vocabulary
+- Each app reads from its configured text file under `assets/`.
+- One word per line. Empty lines are ignored.
+- If the file is missing or empty, a built-in fallback list is used.
 
----
-
-## **📦 Setup Instructions**
-
-1. Install dependencies:
-
-   Use the included `requirements.txt`.
-
-2. Create a `.env` file in the project root with:
-
-GEMINI_API_KEY="YOUR_API_KEY"
-FLASK_SECRET_KEY="YOUR_SECRET_KEY"
-
-
-A free-tier API key from **Google AI Studio** is usually enough for this demo.
-
-
-
----
-
-## **🎮 Current State of the Game**
-
-This is a **quick afternoon prototype**, not a polished product.  
-Here are the known issues and limitations:
-
-### ✔ Core mechanics  
-LLM ranking, scoring, tower logic, and gameplay loop all work.
-
-### ✖ Animation  
-Still under development.  
-FLIP animations work but could be smoother.
-
-### ✖ UI / UX  
-Functional but not pretty — definitely “engineer art.”  
-Future PRs for styling or redesign are very welcome.
-
-### ✖ Ending Condition  
-There is currently **no real end**.  
-In the short term, the intended “finish line” is:
-
-**Who completes the same vocabulary set with the shortest time and highest score.**
-
-Timer + score are included for this reason.
-
-
-
----
-
-## **🤝 Contributing**
-
-**Pull requests are welcome across every front:**
-
-- UI improvements  
-- Animations  
-- Better game balancing  
-- Theme packs / vocab files  
-- End-game logic  
-- Performance optimizations  
-- LLM-prompt enhancement  
-- Anything creative!
-
-This is just a small demo; contributions can elevate it enormously.
-
-
-
----
-
-## **🙏 Acknowledgements**
-
-A multitude of modern AI LLMs inspired this.  
-Gemini powers the engine today, but respect goes to:
-
-- OpenAI  
-- Google  
-- Anthropic  
-- DeepSeek
-- Meta  
-- Qwen  
-- And many more
-
-These models have become **force multipliers of the decade**,  
-reshaping how developers, creators, and everyday people build things.
-
-This project is nowhere close to the groundbreaking technical architecture or UI polish of Google’s original Semantris — that was built by an amazing team of engineers across many stacks.  
-This is just a humble modern twist using tools available to everyone.
-
-
-
----
-
-## **Enjoy the Game! 🎉**
-
-Experiment with word lists.  
-Play with clues.  
-Try creative associations.  
-Push the limits of LLM semantics.  
-
-And most importantly:
-
-**Have fun exploring how modern AI interprets the world through words.**
+## Notes and troubleshooting
+- If the LLM API call fails, `/rank` returns the current board unchanged and sets `api_error=true` for the front end to display.
+- Ensure your `.env` matches the file you run (`app.py` needs Gemini; `app2(OpenAI).py` needs the provider-specific keys).
+- `FLASK_SECRET_KEY` is required for session state; set it to any random string in development.

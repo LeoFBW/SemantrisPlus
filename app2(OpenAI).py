@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 # --- 0. Environment & Vocabulary ---
 
 VOCABULARY = []
-VOCAB_FILE = os.path.join('assets', 'general_1.txt')
+VOCAB_FILE = os.path.join('assets', 'worldwide_destinations_1.txt')
 
 # Load environment variables from .env file
 
